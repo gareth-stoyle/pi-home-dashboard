@@ -1,0 +1,32 @@
+html {
+    padding: 0;
+    margin: 0;
+}
+
+#main {
+    background: #3142B2;
+    background: linear-gradient(135deg, #3142B2, #79DDEC);
+}
+
+
+.card {
+    margin: 100px auto;
+    box-shadow: 0 1rem 3rem rgba(0,0,0,.6);
+}
+
+.btn {
+    margin: 0 1rem;
+}
+
+#side-column {
+    background: rgba(33, 37, 41, 0.97);
+    /* background: linear-gradient(90deg, rgba(27,27,29,1) 0%, rgba(34,34,38,1) 50%, rgba(43,43,50,1) 100%);     */
+}
+
+.inset-shadow {
+    box-shadow: inset 0 0 15px #000000;
+}
+
+#weather {
+    padding-top: 6rem;
+}

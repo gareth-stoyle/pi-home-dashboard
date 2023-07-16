@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pi Home Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  </head>
+
+<body onload="get_weather()">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+              <li class="nav-item">
+                <a class="nav-link h3" href="{{ url_for('index') }}">Pi Home Dashboard</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+    </nav>
+    
+
+    <div id="main">
+        <div class="row">
+          <div class="col-sm-8 inset-shadow">
+
+            <div class="card mx-auto" style="width: 28rem; border: 0;">
+              <img id="stream-frame" class="card-img-top" src="{{ url_for('video_feed') }}">
+              <div class="card-img-overlay">
+                <h5 class="card-title text-white">Living Room</h5>
+              </div>
+              <div class="card-body text-center">
+                <!-- Buttons not yet working, because overlay? -->
+                <button class="btn btn-primary" id="take-picture" onclick="take_picture()">Capture</button>
+                <button class="btn btn-success">Record</button>
+                <button class="btn btn-danger">Disable</button>
+              </div>
+            </div>
+
+          </div>
+          
+          <!-- presentation of weather needs to be fixed -->
+          <div class="col-sm-4" id="side-column">
+            <div id="weather" class="row text-center">
+                <img id="symbol"></img>
+                <h1 id="weather-output"></h1>
+            </div>
+            <div id="indoor-temp">
+
+            </div>
+          </div>
+
+        </div>
+      
+    
+    </div>
+
+    <footer class="bg-dark text-center text-muted py-2">
+        <div class="container">
+          <p class="mb-0">Gareth &copy; 2023. All rights reserved.</p>
+        </div>
+    </footer>  
+    <script type="text/javascript">
+
+      // stop stream
+      function take_picture() {
+          // functionality to redirect to /picture - not tested
+          window.location.replace("picture");
+      };
+
+      function get_weather() {
+        // set the parameters for the API link
+        let apikey = "91fee61fd7f9ac990abca0fd83b26b5e";
+        let location = "Phuket";
+        let url = "http://api.openweathermap.org/data/2.5/weather?units=metric&appid="+apikey+"&q="+location
+        
+        // ajax call to retrieve info from API
+        $.ajax ({
+            url: url,
+            type: "GET",
+            dataType: "json"
+        }).done(function(response) {
+            // pull relevant info from API response
+            let weather = response.weather[0].description;
+            let temp = Math.round(response.main.temp);
+            let symbol = "https://openweathermap.org/img/wn/" + response.weather[0].icon + "@2x.png";
+
+            // Output the relevant info
+            let output = "<h2 class='text-light'>" + temp + "°C<br></h2>";
+            $('#weather-output').html(output);
+            console.log(response);
+            // set the symbol, set the background and store the info in DB
+            $("#symbol").attr("src", symbol);
+        }).fail(function(response) {
+                $('#weather-output').html("Error: " + response.status + " contact system administrator!");
+        });
+      }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script></body>
+
+</body>
+</html>
