@@ -1,6 +1,5 @@
 from flask import Flask, render_template, Response, request, send_from_directory, redirect, url_for
 from camera import VideoCamera
-import os
 
 pi_camera = VideoCamera(flip=True) # flip pi camera if upside down.
 app = Flask(__name__)
